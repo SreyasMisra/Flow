@@ -1,0 +1,89 @@
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #7DD4C8;
+  color: #ccc;
+}
+
+div {
+  position: relative;
+  left: -5%;
+}
+
+
+h1 {
+  margin: 0;
+  height: 12vmin;
+  width: 120vmin;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+h1::before {
+  content: "";
+  display: block;
+  position: absolute;
+  z-index: -1;
+  top: -20vmin;
+  left: 36vmin;
+  width: 46.5vmin;
+  height: 46.5vmin;
+  border-radius: 50%;
+  border: 1.3vmin solid currentColor;
+  box-sizing: border-box;
+}
+
+em {
+  font-family: 'Josefin Sans', sans-serif;
+  color: currentColor;
+  font-size: 11.25vmin;
+  position: relative;
+  font-style: normal;
+  width: 15vmin;
+  text-align: center;
+}
+
+em.planet {
+  -webkit-animation: planet-rotate 4s linear infinite;
+  animation: planet-rotate 4s linear infinite;
+  position: relative;
+}
+
+em.planet::before {
+  content: "";
+  position: absolute;
+  top: -.5vmin;
+  left: 3.5vmin;
+  z-index: -1;
+  width: 10vmin;
+  height: 10vmin;
+  border-radius: 50%;
+  background: #7DD4C8;
+}
+
+em.left {
+  -webkit-transform-origin: 30vmin 3.75vmin;
+  transform-origin: 30vmin 3.75vmin;
+}
+
+em.right {
+  -webkit-transform-origin: -15vmin 3.75vmin;
+  transform-origin: -15vmin 3.75vmin;
+}
+
+@-webkit-keyframes planet-rotate {
+  to {
+    -webkit-transform: rotate(1turn);
+  }
+}
+
+@keyframes planet-rotate {
+  to {
+    transform: rotate(1turn);
+  }
+}
