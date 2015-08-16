@@ -1,0 +1,134 @@
+body, html {
+      line-height: 1.5em;;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+      color: #4d4d4d;
+      box-sizing: border-box;
+      overflow: hidden;
+      background-color: #7DD4C8;
+    }
+
+    #header {
+      font-family: 'Josefin Sans', sans-serif;
+      margin: 0;
+      padding: 10px;
+      box-sizing: border-box;
+      color: white;
+      text-align: center;
+    }
+
+    #contents {
+      height: 90%;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      position: relative;    }
+
+    #graph{
+      width: 50%;
+      height: 80%;
+      margin-left:0%;
+      text-align: center;
+      padding: 10px;
+      box-sizing: border-box;
+      display: inline-block;
+    }
+
+    .inputs{
+      width: 30%;
+      margin-left: 10%;
+      text-align: left;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .inputs2{
+      width: 30%;
+      margin-left: 10%;
+      text-align: left;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    
+
+    #invis{
+      color: #7DD4C8;
+    }
+
+    #controlpanel {
+      background-color: #7DD4C8;
+      padding: 10px;
+      float: right;
+      margin-right: 5%;
+      text-align: center;
+    }
+
+    .input_fields_wrap {
+      font-family: 'Josefin Sans', sans-serif;
+      width: 100%
+      margin-left: 10%;
+      height: 410px;
+      overflow: scroll;
+      font-size: 12px;
+      background: #7DD4C8;
+    }
+
+    #error {
+      color: red;
+    }
+
+    #data {
+      display: inline-block;
+      width: 30%;
+      height: 80%;
+      border: 1px solid #d3d3d3;
+      box-sizing: border-box;
+      resize: none;
+    }
+
+    #draw #add_field_button{
+      padding: 5px 15px;
+    }
+
+    #paste {
+      width: 214px;
+    }
+
+    #leak {
+      width: 214px;
+    }
+
+    #mynetwork {
+      width: 100%;
+      height: 100%;
+      border: 1px solid #d3d3d3;
+      background: white;
+      box-sizing: border-box;
+    }
+
+    button { 
+    appearance: none;
+    outline: 0;
+    background: #7DD4C8;
+    border: 3px solid rgba(255, 255, 255, 0.9);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    width: 150px;
+    cursor: pointer;
+    font-size: 18px;
+    -webkit-transition-duration: 0.25s;
+    transition-duration: 0.25s;
+    font-weight: 300;
+    font-family: 'Lato', sans-serif;
+    }
+
+    button:hover {
+    background-color: #77ACCC;
+    }
+
+    a:hover {
+      color: red;
+    }
