@@ -9,9 +9,12 @@ body {
   color: #ccc;
 }
 
-div {
+#flow {
   position: relative;
-  left: -5%;
+}
+
+#buttons{
+  text-align: center;
 }
 
 
@@ -65,6 +68,31 @@ em.planet::before {
   border-radius: 50%;
   background: #7DD4C8;
 }
+
+button { 
+    appearance: none;
+    outline: 0;
+    background: #7DD4C8;
+    border: 3px solid rgba(255, 255, 255, 0.9);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    width: 150px;
+    cursor: pointer;
+    font-size: 18px;
+    -webkit-transition-duration: 0.25s;
+    transition-duration: 0.25s;
+    font-weight: 300;
+    font-family: 'Lato', sans-serif;
+    }
+
+    button:hover {
+    background-color: #77ACCC;
+    }
+
+    a:hover {
+      color: red;
+    }
 
 em.left {
   -webkit-transform-origin: 30vmin 3.75vmin;
