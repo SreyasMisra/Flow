@@ -1,0 +1,317 @@
+<!doctype html>
+<html>
+<head>
+  <title>FLOW</title>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+  <script src="vis/dist/vis.js"></script>
+  <script type="text/javascript" src="fullPage.js-master/jquery.fullPage.js"></script>
+
+  <link href="vis/dist/vis.css" rel="stylesheet" type="text/css" />
+  <link href='http://fonts.googleapis.com/css?family=Josefin+Sans' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="styles/graph.css">
+
+</head>
+
+<script>
+        $(document).ready(function() {
+            $('#fullpage').fullpage({
+                slidesNavigation: true,
+                slidesNavPosition: 'bottom',
+            });
+        });
+</script>
+
+
+
+<body>
+
+<div id="fullpage">
+    <div class="section" id="section0">
+  <div id="header">
+    <h1>FLOW</h1>
+  </div>
+  <div id="contents">
+    <div id = "graph">
+      
+      <div id = "Draw">
+        <button id="draw">Wiggle</button>
+      </div>
+
+      <br>
+      
+      <div id="mynetwork">
+
+      </div>
+    </div>
+
+    <div id="controlpanel">
+      <button class="add_field_button">Build New Pipe</button>
+            <br> <br>
+      <div class="input_fields_wrap">
+            
+            <div id = form>
+                Start: <input type="text" name="start[]" style="width: 60px" id = "start0">
+                Type: <select id = "starttype0"> <option value = s> Source </option> <option value = j> Junction </option> <option value = h> House </option> </select>
+                End: <input type="text" name="end[]" style="width: 60px" id = "final0">
+                Type: <select id = "finaltype0"> <option value = s> Source </option> <option value = j> Junction </option> <option value = h> House </option> </select>
+                <span id ="invis"> Remove &nbsp; </span>
+
+
+            </div>
+        </div>
+     
+    </div>
+  </div>
+</div>
+
+<div class = "section" id = "section1">
+  <div id="header">
+    <h1> Enter in your flow data for analysis. You can paste it from Excel. </h1>
+  </div>
+
+  <div class = "inputs">
+    <button id = "paste">Analyze</button>
+  </div>
+
+  <div class ="inputs2">
+    <button id = "leak">Find Leaks</button>
+  </div>
+</div>
+
+</div>
+
+<!-- scripts -->
+<!-- scripts -->
+<!-- scripts -->
+<!-- scripts -->
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // create a network
+
+
+  var container = document.getElementById('mynetwork');
+  
+
+  var options = {
+        physics: {
+            stabilization: false,
+            barnesHut: {
+                springLength: 200
+            }
+        }
+    };
+
+data = {}
+
+var network = new vis.Network(container, data, options);
+
+$('#draw').click(draw);
+
+$('a.example').click(function (event) {
+    var url = $(event.target).data('url');
+    $.get(url)
+    .done(function(dotData) {
+      $('#data').val(dotData);
+      draw();
+  })
+    .fail(function () {
+      $('#error').html('Error: Cannot fetch the example data because of security restrictions in JavaScript. Run the example from a server instead of as a local file to resolve this problem. Alternatively, you can copy/paste the data of DOT graphs manually in the textarea below.');
+      resize();
+  });
+});
+
+$(window).resize(resize);
+$(window).load(draw);
+
+$('#data').keydown(function (event) {
+    if (event.ctrlKey && event.keyCode === 13) { // Ctrl+Enter
+      draw();
+      event.stopPropagation();
+      event.preventDefault();
+  }
+});
+
+    var max_fields      = 20; //maximum input boxes allowed
+    var inputfields     = $(".inputs"); // Paste Boxes
+    var inputfields2    = $(".inputs2"); // Leak Boxes
+    var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+    var add_button      = $(".add_field_button"); //Add button ID
+    var DOT = "digraph { node [shape=square fontsize=16] edge [length=100, color=gray, fontcolor=black] Jason -> Sreyas[label=10] }";
+    var x = 0; //initial text box count
+    var names = [];
+
+    $(add_button).click(function(e){ //on add input button click
+
+        e.preventDefault();
+
+
+        DOT = "digraph { node [shape=square fontsize=16] edge [length=100, color=gray, fontcolor=black]";
+
+        for (row = 0; row <= x; row++)
+        {
+            if ($('#start' + row).val().length == 0 || $('#final' + row).val().length == 0)
+             {
+              alert("Error: Please fill in the information completely!")
+              return;
+             } 
+
+            DOT += " " + $('#start' + row).val() + " -> " + $('#final' + row).val() 
+        }
+
+        DOT += " }"
+
+
+          if(x < max_fields){ //max input box allowed
+            x++; //text box increment
+            $(wrapper).append('<div> Start: <input type="text" name="start[]" style="width: 60px" id = "start' + x + '"/> Type: <select id = "starttype' + x + '"> <option value = s> Source </option> <option value = j> Junction </option> <option value = h> House </option> </select> End:    <input  type="text" name="end[]" style="width: 60px" id = "final' + x + '"/> Type: <select id = "finaltype' + x + '"> <option value = s> Source </option> <option value = j> Junction </option> <option value = h> House </option> </select> <a href="#" class="remove_field">Remove</a>&nbsp;</div>'); //add input box
+
+            
+            names.push($('#start' + (x - 1)).val());
+
+            l1 = names.length;
+
+            names = uniques(names);
+
+            l2 = names.length;
+
+            if (l2 == l1) {
+
+              create();
+
+            }
+
+
+             names.push($('#final' + (x - 1)).val());
+            
+
+            l1 = names.length;
+
+            names = uniques(names);
+
+            l2 = names.length;
+
+            if (l2 == l1) {
+
+              create();
+
+            }
+
+        }
+
+        draw();
+
+    });
+
+    $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+        e.preventDefault(); $(this).parent('div').remove(); x--;
+
+         DOT = "digraph { node [shape=square fontsize=16] edge [length=100, color=gray, fontcolor=black]";
+
+        for (row = 0; row < x; row++)
+        {
+            if ($('#start' + row).val().length == 0 || $('#final' + row).val().length == 0)
+             {
+              alert("Error: Please fill in the information completely!")
+              return;
+             } 
+
+            DOT += " " + $('#start' + row).val() + " -> " + $('#final' + row).val()
+        }
+
+        DOT += " }"
+
+        draw();
+
+
+    });
+
+$('#paste').click(send);
+
+function create() {
+
+    $(inputfields).append('<div> <input type="text" placeholder = "' + names[names.length - 1] +  '"style="width: 200px" id = "' + names[names.length - 1] + '"/> </div <br>');
+    $(inputfields2).append('<div> <input type="text" placeholder = "' + names[names.length - 1] +  '"style="width: 200px" id = "t' + names[names.length - 1] + '"/> </div <br>');
+
+}
+
+// Keeps only unique elements
+function uniques(arr) {
+    var a = [];
+    for (var i=0, l=arr.length; i<l; i++)
+        if (a.indexOf(arr[i]) === -1 && arr[i] !== '')
+            a.push(arr[i]);
+    return a;
+}
+
+
+
+function resize() {
+    $('#contents').height($('body').height() - $('#header').height() - 30);
+}
+
+function draw () {
+    try {
+      resize();
+      $('#error').html('');
+
+      // Provide a string with data in DOT language
+
+      data = vis.network.convertDot(DOT);
+
+      network.setData(data);
+  }
+  catch (err) {
+      // set the cursor at the position where the error occurred
+      var match = /\(char (.*)\)/.exec(err);
+      if (match) {
+        var pos = Number(match[1]);
+        var textarea = $('#data')[0];
+        if(textarea.setSelectionRange) {
+          textarea.focus();
+          textarea.setSelectionRange(pos, pos);
+      }
+  }
+
+      // show an error message
+      $('#error').html(err.toString());
+  }
+}
+
+function send()
+{
+  var graphdata = '';
+
+        for (r = 0; r < x; r++)
+        {
+          graphdata += $('#start' + r).val() + " " + $('#starttype' + r).val() + " " + $('#final' + r).val() + " " + $('#finaltype' + r).val() 
+        }
+
+  var flowdata = '';
+
+        for (r = 0; r < names.length; r++)
+        {
+            flowdata += names[r] + " ";
+        }
+
+        for (r = 0; r < names.length; r++)
+        {
+            flowdata += $('#' + names[r]).val() + " ";
+        }
+
+  var leakdata = '';
+        for (r = 0; r < names.length; r++)
+        {
+            leakdata += $('#t' + names[r]).val() + " ";
+        }
+
+  var pydata = graphdata + " $ " + flowdata + " $ " + leakdata;
+  alert(pydata)
+
+}
+});
+</script>
+</body>
+</html>
