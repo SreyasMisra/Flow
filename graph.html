@@ -6,7 +6,7 @@
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
   <script src="vis/dist/vis.js"></script>
   <script type="text/javascript" src="fullPage.js-master/jquery.fullPage.js"></script>
-  <script src="/Chart.js"></script>
+  <script src="Chart.js-master/Chart.js"></script>
 
   <link href="vis/dist/vis.css" rel="stylesheet" type="text/css" />
   <link href='http://fonts.googleapis.com/css?family=Josefin+Sans' rel='stylesheet' type='text/css'>
@@ -21,6 +21,11 @@
                 slidesNavPosition: 'bottom',
             });
         });
+</script>
+    
+<script src="/pico/client.js"></script>
+<script>
+    pico.load("example");
 </script>
 
 
@@ -94,11 +99,8 @@
 <script type="text/javascript">
 $(document).ready(function() {
   // create a network
-
-
   var container = document.getElementById('mynetwork');
   
-
   var options = {
         physics: {
             stabilization: false,
@@ -107,13 +109,9 @@ $(document).ready(function() {
             }
         }
     };
-
 data = {}
-
 var network = new vis.Network(container, data, options);
-
 $('#draw').click(draw);
-
 $('a.example').click(function (event) {
     var url = $(event.target).data('url');
     $.get(url)
@@ -126,10 +124,8 @@ $('a.example').click(function (event) {
       resize();
   });
 });
-
 $(window).resize(resize);
 $(window).load(draw);
-
 $('#data').keydown(function (event) {
     if (event.ctrlKey && event.keyCode === 13) { // Ctrl+Enter
       draw();
@@ -137,7 +133,6 @@ $('#data').keydown(function (event) {
       event.preventDefault();
   }
 });
-
     var max_fields      = 20; //maximum input boxes allowed
     var inputfields     = $(".inputs"); // Paste Boxes
     var inputfields2    = $(".inputs2"); // Leak Boxes
@@ -147,14 +142,9 @@ $('#data').keydown(function (event) {
     var x = 0; //initial text box count
     var names = [];
     var pyresponse = "";
-
     $(add_button).click(function(e){ //on add input button click
-
         e.preventDefault();
-
-
         DOT = "digraph { node [shape=square fontsize=16] edge [length=100, color=gray, fontcolor=black]";
-
         for (row = 0; row <= x; row++)
         {
             if ($('#start' + row).val().length == 0 || $('#final' + row).val().length == 0)
@@ -162,59 +152,34 @@ $('#data').keydown(function (event) {
               alert("Error: Please fill in the information completely!")
               return;
              } 
-
             DOT += " " + $('#start' + row).val() + " -> " + $('#final' + row).val() 
         }
-
         DOT += " }"
-
-
           if(x < max_fields){ //max input box allowed
             x++; //text box increment
             $(wrapper).append('<div> Start: <input type="text" name="start[]" style="width: 60px" id = "start' + x + '"/> Type: <select id = "starttype' + x + '"> <option value = s> Source </option> <option value = j> Junction </option> <option value = h> House </option> </select> End:    <input  type="text" name="end[]" style="width: 60px" id = "final' + x + '"/> Type: <select id = "finaltype' + x + '"> <option value = s> Source </option> <option value = j> Junction </option> <option value = h> House </option> </select> <a href="#" class="remove_field">Remove</a>&nbsp;</div>'); //add input box
-
             
             names.push($('#start' + (x - 1)).val());
-
             l1 = names.length;
-
             names = uniques(names);
-
             l2 = names.length;
-
             if (l2 == l1) {
-
               create();
-
             }
-
-
              names.push($('#final' + (x - 1)).val());
             
-
             l1 = names.length;
-
             names = uniques(names);
-
             l2 = names.length;
-
             if (l2 == l1) {
-
               create();
-
             }
-
         }
-
         draw();
-
     });
-
     $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
         e.preventDefault(); $(this).parent('div').remove(); x--;
-
          DOT = "digraph { node [shape=square fontsize=16] edge [length=100, color=gray, fontcolor=black]";
-
         for (row = 0; row < x; row++)
         {
             if ($('#start' + row).val().length == 0 || $('#final' + row).val().length == 0)
@@ -222,26 +187,16 @@ $('#data').keydown(function (event) {
               alert("Error: Please fill in the information completely!")
               return;
              } 
-
             DOT += " " + $('#start' + row).val() + " -> " + $('#final' + row).val()
         }
-
         DOT += " }"
-
         draw();
-
-
     });
-
 $('#paste').click(send);
-
 function create() {
-
     $(inputfields).append('<div> <input type="text" placeholder = "' + names[names.length - 1] +  '"style="width: 200px" id = "' + names[names.length - 1] + '"/> </div <br>');
     $(inputfields2).append('<div> <input type="text" placeholder = "' + names[names.length - 1] +  '"style="width: 200px" id = "t' + names[names.length - 1] + '"/> </div <br>');
-
 }
-
 // Keeps only unique elements
 function uniques(arr) {
     var a = [];
@@ -250,22 +205,15 @@ function uniques(arr) {
             a.push(arr[i]);
     return a;
 }
-
-
-
 function resize() {
     $('#contents').height($('body').height() - $('#header').height() - 30);
 }
-
 function draw () {
     try {
       resize();
       $('#error').html('');
-
       // Provide a string with data in DOT language
-
       data = vis.network.convertDot(DOT);
-
       network.setData(data);
   }
   catch (err) {
@@ -279,59 +227,49 @@ function draw () {
           textarea.setSelectionRange(pos, pos);
       }
   }
-
       // show an error message
       $('#error').html(err.toString());
   }
 }
-
 function send()
 {
   var graphdata = '';
-
         for (r = 0; r < x; r++)
         {
           graphdata += $('#start' + r).val() + " " + $('#starttype' + r).val() + " " + $('#final' + r).val() + " " + $('#finaltype' + r).val() 
         }
-
   var flowdata = '';
-
         for (r = 0; r < names.length; r++)
         {
             flowdata += names[r] + " ";
         }
-
         for (r = 0; r < names.length; r++)
         {
             flowdata += $('#' + names[r]).val() + " ";
         }
-
   var leakdata = '';
         for (r = 0; r < names.length; r++)
         {
             leakdata += $('#t' + names[r]).val() + " ";
         }
-
   var pydata = graphdata + " $ " + flowdata + " $ " + leakdata;
-  
-
+  example.hello(pydata, function(response){
+    pyresponse = response; //prints return value of python script
+    alert(pyresponse);
+  });
 }
-
 function makegraph()
 {
   var edgeind = pyresponse.indexOf('$');
   var aveind = pyresponse.indexOf('%');
   var leakind = pyresponse.indexOf('#');
-
   edges = pyresponse.substring(0,edgeind-1);
   averages = pyresponse.substring(edgeind+2, aveind-1);
   leaks = pyresponse.substring(aveind+2, leakind -1 );
   leak = pyresponse.substring(leakind+2, pyresponse.length);
-
   edgelabels = pyresponse.split(" ");
   avelabels = pyresponse.split(" ");
   leaklabels = pyresponse.split(" ");
-
   var barChartData = {
     labels : edgelabels,
     datasets : [
@@ -350,7 +288,6 @@ function makegraph()
         data : leaklabels
       }
     ]
-
   }
   window.onload = function(){
     var ctx = document.getElementById("canvas").getContext("2d");
@@ -358,14 +295,7 @@ function makegraph()
       responsive : true
     });
   }
-
-
-
-
-
 }
-
-
 });
 </script>
 </body>
