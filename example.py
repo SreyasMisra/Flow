@@ -270,7 +270,8 @@ hello()
 #standard deviation for all
 #comparing test data with averages: look for ones that have high difference from mean ~2 stdev
 #highlight in red by sending pack to html doc --> potentially identify origin of leak  
-
+ #AVERAGE IS WRONG; recompute?   
+    
                  
         
     
